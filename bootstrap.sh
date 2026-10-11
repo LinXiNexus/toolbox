@@ -239,11 +239,15 @@ fi
 # ---------------------------------------------------------------- 5. 使用方法
 step "5/5  安装完成"
 
-CMD="toolbox"
-case ":${PATH}:-" in
-    *":$BINDIR:"*) : ;;
-    *) CMD="$BINDIR/toolbox" ;;
-esac
+if [ "$NO_LINK" = 1 ] || [ -z "$BINDIR" ]; then
+    CMD="$INSTALL_DIR/run.sh"
+else
+    CMD="toolbox"
+    case ":${PATH}:" in
+        *":$BINDIR:"*) : ;;
+        *) CMD="$BINDIR/toolbox" ;;
+    esac
+fi
 
 printf "\n"
 printf "%s\n" "=============================================="
@@ -266,6 +270,7 @@ printf "  [2] 手机号菜单\n"
 printf "      [1] 查询归属地          [2] 前三后二穷举手机号\n"
 printf "      [3] 批量归属地查询      [4] 号段反查(按地区)\n"
 printf "      [5] 格式化 / 脱敏\n"
+printf "  [3] 检查更新\n"
 printf "  [0] 退出\n"
 printf "\n"
 printf "%s【通用操作】%s\n" "$C_TITLE" "$C_RST"
@@ -274,7 +279,9 @@ printf "  分页时输入 q             -> 回主菜单\n"
 printf "  Ctrl+C                   -> 随时中断\n"
 printf "\n"
 printf "%s【维护】%s\n" "$C_TITLE" "$C_RST"
-printf "  更新代码: cd %s && git pull\n" "$INSTALL_DIR"
+printf "  检查更新: %s --check\n" "$CMD"
+printf "  更新代码: %s --update    (或 cd %s && git pull)\n" "$CMD" "$INSTALL_DIR"
+printf "  屏蔽更新: %s --mute      (恢复: %s --unmute)\n" "$CMD" "$CMD"
 printf "  查看状态: %s/install.sh --status\n" "$INSTALL_DIR"
 printf "  卸载命令: %s/install.sh -u\n" "$INSTALL_DIR"
 printf "  完整文档: %s/使用说明.md\n" "$INSTALL_DIR"
