@@ -23,7 +23,7 @@
 set -u
 
 # ↓↓↓ 发布后把这里改成你的仓库地址, 之后就能免参数运行 ↓↓↓
-DEFAULT_REPO=""
+DEFAULT_REPO="https://github.com/LinXiNexus/toolbox.git"
 
 C_OK=$'\033[1;32m'; C_ERR=$'\033[1;31m'; C_WARN=$'\033[1;35m'
 C_KEY=$'\033[1;33m'; C_TITLE=$'\033[1;36m'; C_DIM=$'\033[2m'; C_RST=$'\033[0m'
