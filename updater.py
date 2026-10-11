@@ -28,7 +28,14 @@ from common import (line, ask_input, BackToPrev,
 
 REPO_RAW = "https://raw.githubusercontent.com/LinXiNexus/toolbox/main"
 VERSION_URL = REPO_RAW + "/VERSION"
+API_URL = "https://api.github.com/repos/LinXiNexus/toolbox/contents/VERSION?ref=main"
 REPO_URL = "https://github.com/LinXiNexus/toolbox.git"
+
+# 可用环境变量覆盖(便于测试/镜像):
+#   TOOLBOX_VERSION_URL   指定 raw 地址
+#   TOOLBOX_API_URL       指定 API 地址 (设为空字符串可跳过 API)
+VERSION_URL = os.environ.get("TOOLBOX_VERSION_URL", VERSION_URL)
+API_URL = os.environ.get("TOOLBOX_API_URL", API_URL)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG = os.path.join(os.path.expanduser("~"), ".toolbox_update.json")
@@ -60,7 +67,25 @@ def is_newer(remote, local):
     return parse_ver(remote) > parse_ver(local)
 
 
-def fetch_remote_version(timeout=NET_TIMEOUT):
+def _fetch_api(timeout):
+    """走 GitHub API (缓存约 60 秒, 比 raw 的 CDN 实时)"""
+    if not API_URL:
+        return None
+    try:
+        req = urllib.request.Request(API_URL, headers={
+            "User-Agent": "toolbox-updater",
+            "Accept": "application/vnd.github+json",
+        })
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            d = json.loads(r.read().decode("utf-8", "ignore"))
+        import base64
+        content = base64.b64decode(d.get("content", "")).decode("utf-8", "ignore")
+        return content.strip() or None
+    except Exception:
+        return None
+
+
+def _fetch_raw(timeout):
     try:
         req = urllib.request.Request(
             VERSION_URL, headers={"User-Agent": "toolbox-updater"})
@@ -68,6 +93,14 @@ def fetch_remote_version(timeout=NET_TIMEOUT):
             return r.read().decode("utf-8", "ignore").strip() or None
     except Exception:
         return None
+
+
+def fetch_remote_version(timeout=NET_TIMEOUT):
+    """先试 API, 失败再退回 raw"""
+    v = _fetch_api(timeout)
+    if v:
+        return v
+    return _fetch_raw(timeout)
 
 
 def load_config():
