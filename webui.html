@@ -8,71 +8,80 @@
 :root{
   --bg:#0f1115; --panel:#171a21; --panel2:#1d212a; --border:#272d39;
   --text:#d7dce5; --dim:#8b93a3; --accent:#3fc1c9; --ok:#4ade80;
-  --err:#f87171; --warn:#fbbf24; --key:#fbbf24;
+  --err:#f87171; --warn:#fbbf24;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--text);
-  font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif}
-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  background:linear-gradient(180deg,#1a1f29,#0f1115);position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:17px;font-weight:600;letter-spacing:.5px}
+html,body{margin:0;background:var(--bg);color:var(--text)}
+body{font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  padding-bottom:40px}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;
+  padding:12px 14px;border-bottom:1px solid var(--border);
+  background:rgba(15,17,21,.92);backdrop-filter:blur(8px)}
+header h1{margin:0;font-size:16px;font-weight:600;white-space:nowrap}
 header .ver{color:var(--dim);font-size:12px;font-weight:400}
 header .sp{flex:1}
 button{font:inherit;cursor:pointer;border:1px solid var(--border);background:var(--panel2);
-  color:var(--text);padding:7px 13px;border-radius:8px;transition:.15s}
-button:hover{border-color:var(--accent);color:var(--accent)}
-button.on{background:var(--accent);color:#08222a;border-color:var(--accent);font-weight:600}
-button.pri{background:var(--accent);color:#08222a;border-color:var(--accent);font-weight:600;padding:9px 20px}
-button.pri:hover{filter:brightness(1.1);color:#08222a}
-button.sm{padding:5px 10px;font-size:12px}
-nav.tabs{display:flex;gap:8px;padding:12px 16px 0}
-nav.tabs button{flex:1;max-width:180px}
-nav.subs{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none}
-nav.subs::-webkit-scrollbar{display:none}
-nav.subs button{white-space:nowrap;font-size:13px;padding:6px 12px}
-main{padding:0 16px 60px;max-width:860px;margin:0 auto}
-.panel{display:none}
-.panel.on{display:block}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+  color:var(--text);padding:8px 14px;border-radius:9px;transition:.15s}
+button:hover{border-color:var(--accent)}
+button:active{transform:scale(.98)}
+button.pri{background:var(--accent);color:#08222a;border-color:var(--accent);font-weight:600}
+button.sm{padding:6px 11px;font-size:12.5px}
+main{max-width:760px;margin:0 auto;padding:0 14px}
+.gt{display:flex;align-items:center;gap:10px;margin:20px 0 10px;color:var(--dim);font-size:12px;letter-spacing:1px}
+.gt::after{content:"";flex:1;height:1px;background:var(--border)}
+.acc{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:9px;overflow:hidden}
+.acc-h{width:100%;text-align:left;background:none;border:0;border-radius:0;padding:14px 16px;
+  display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--text)}
+.acc-h:hover{background:var(--panel2)}
+.acc-h .arw{color:var(--dim);transition:.2s;font-size:11px;width:10px}
+.acc.on .acc-h{color:var(--accent);font-weight:600}
+.acc.on .acc-h .arw{transform:rotate(90deg)}
+.acc-b{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.acc.on .acc-b{display:block}
+.acc-b>*:first-child{margin-top:14px}
 label{display:block;color:var(--dim);font-size:12px;margin:0 0 5px}
-input[type=text],input[type=number],textarea,select{
-  width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
-  border-radius:8px;padding:10px 12px;font:inherit;font-family:ui-monospace,Menlo,Consolas,monospace}
+input[type=text],input[type=number],textarea,select{width:100%;background:var(--bg);
+  border:1px solid var(--border);color:var(--text);border-radius:9px;padding:11px 12px;
+  font:inherit;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
-textarea{resize:vertical;min-height:90px}
+textarea{resize:vertical;min-height:88px}
 select{font-family:inherit}
-.row{display:flex;gap:12px;flex-wrap:wrap}
-.row>div{flex:1;min-width:130px}
-.radios{display:flex;gap:8px}
-.radios label{display:flex;align-items:center;gap:6px;color:var(--text);font-size:14px;margin:0;
-  padding:8px 14px;border:1px solid var(--border);border-radius:8px;cursor:pointer}
-.radios input{accent-color:var(--accent)}
+.f{margin-bottom:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>.f{flex:1;min-width:120px;margin-bottom:0}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label{display:flex;align-items:center;gap:6px;margin:0;padding:8px 14px;border:1px solid var(--border);
+  border-radius:9px;cursor:pointer;color:var(--text);font-size:14px;background:var(--bg)}
+.seg input{accent-color:var(--accent)}
+.seg label:has(input:checked){border-color:var(--accent);color:var(--accent)}
 .hint{color:var(--dim);font-size:12px;margin-top:6px}
-.act{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.out{margin-top:14px}
+.go{margin-top:14px}
+.go button{width:100%;padding:12px;font-size:15px}
 .out:empty{display:none}
-pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;
-  overflow:auto;max-height:420px;margin:0;font:12.5px/1.7 ui-monospace,Menlo,Consolas,monospace;
+.out{margin-top:14px}
+pre{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:12px;
+  overflow:auto;max-height:380px;margin:0;font:12.5px/1.75 ui-monospace,Menlo,Consolas,monospace;
   white-space:pre-wrap;word-break:break-all}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top}
 th{color:var(--dim);font-weight:500;font-size:12px}
 tr:last-child td{border-bottom:none}
-.kv{display:grid;grid-template-columns:88px 1fr;gap:6px 12px;font-size:14px}
+.kv{display:grid;grid-template-columns:80px 1fr;gap:7px 12px}
 .kv b{color:var(--dim);font-weight:400;font-size:13px}
 .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
-.ok{color:var(--ok)} .err{color:var(--err)} .warn{color:var(--warn)} .dim{color:var(--dim)}
+.ok{color:var(--ok)}.err{color:var(--err)}.warn{color:var(--warn)}.dim{color:var(--dim)}
 .tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;
   border:1px solid var(--border);color:var(--dim)}
-.stat{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;font-size:13px}
-.stat b{color:var(--key)}
-.grid-seg{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.grid-seg span{font-family:ui-monospace,monospace;font-size:12px;background:var(--panel2);
+.stat{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;font-size:13px}
+.stat b{color:var(--warn)}
+.segs{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.segs span{font-family:ui-monospace,monospace;font-size:12px;background:var(--panel2);
   border:1px solid var(--border);padding:2px 7px;border-radius:5px}
-footer{padding:16px;text-align:center;color:var(--dim);font-size:12px;border-top:1px solid var(--border)}
-.banner{padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;
+#msg{max-width:760px;margin:0 auto;padding:0 14px}
+#msg:empty{display:none}
+.banner{padding:10px 13px;border-radius:9px;font-size:13px;margin-top:12px;
   border:1px solid var(--border);background:var(--panel2)}
+footer{max-width:760px;margin:26px auto 0;padding:0 14px;color:var(--dim);font-size:12px;text-align:center}
 </style>
 </head>
 <body>
@@ -83,151 +92,140 @@ footer{padding:16px;text-align:center;color:var(--dim);font-size:12px;border-top
   <button class="sm" id="btnCheck">检查更新</button>
 </header>
 
-<nav class="tabs">
-  <button class="on" data-tab="id">身份证</button>
-  <button data-tab="phone">手机号</button>
-</nav>
+<div id="msg"></div>
 
 <main>
-<div id="tab-update-msg"></div>
 
-<!-- ==================== 身份证 ==================== -->
-<section id="tab-id">
-  <nav class="subs" data-group="id">
-    <button class="on" data-sub="brute">后四位穷举</button>
-    <button data-sub="check">校验18位</button>
-    <button data-sub="cd">17位补校验位</button>
-    <button data-sub="info">信息提取</button>
-    <button data-sub="derive">按生肖/星座反推</button>
-    <button data-sub="batch">批量校验</button>
-  </nav>
+<div class="gt">身份证</div>
 
-  <div class="panel on" id="id-brute">
-    <div class="card">
-      <label>前 14 位（认不清的位用 ? 占位）</label>
-      <input type="text" id="brute-prefix" placeholder="44030519900307" value="44030519900307">
-      <div class="hint">结构：1-6 地址码 ｜ 7-14 出生日期 ｜ 15-17 顺序码 ｜ 18 校验码</div>
-      <div class="act" style="margin-top:12px">
-        <div class="radios">
-          <label><input type="radio" name="brute-g" value="男" checked>男</label>
-          <label><input type="radio" name="brute-g" value="女">女</label>
-        </div>
-      </div>
-      <div class="act"><button class="pri" data-act="id/brute">开始穷举</button></div>
-      <div class="out" id="out-brute"></div>
-    </div>
+<div class="acc on" data-key="id/brute" data-out="out-brute">
+  <button class="acc-h"><span class="arw">▶</span>后四位穷举</button>
+  <div class="acc-b">
+    <div class="f"><label>前 14 位（认不清的位用 ? 占位）</label>
+      <input type="text" id="brute-prefix" value="44030519900307" placeholder="44030519900307"></div>
+    <div class="hint">1-6 地址码 ｜ 7-14 出生日期 ｜ 15-17 顺序码 ｜ 18 校验码</div>
+    <div class="f" style="margin-top:12px"><label>性别</label>
+      <div class="seg">
+        <label><input type="radio" name="brute-g" value="男" checked>男</label>
+        <label><input type="radio" name="brute-g" value="女">女</label>
+      </div></div>
+    <div class="go"><button class="pri" data-act="id/brute">开始穷举</button></div>
+    <div class="out" id="out-brute"></div>
   </div>
+</div>
 
-  <div class="panel" id="id-check">
-    <div class="card">
-      <label>完整 18 位号码</label>
-      <input type="text" id="check-raw" placeholder="11010519491231002X" value="11010519491231002X">
-      <div class="act"><button class="pri" data-act="id/check">校验</button></div>
-      <div class="out" id="out-check"></div>
-    </div>
+<div class="acc" data-key="id/check" data-out="out-check">
+  <button class="acc-h"><span class="arw">▶</span>校验 18 位号码</button>
+  <div class="acc-b">
+    <div class="f"><label>完整 18 位</label>
+      <input type="text" id="check-raw" value="11010519491231002X" placeholder="11010519491231002X"></div>
+    <div class="go"><button class="pri" data-act="id/check">校验</button></div>
+    <div class="out" id="out-check"></div>
   </div>
+</div>
 
-  <div class="panel" id="id-cd">
-    <div class="card">
-      <label>前 17 位</label>
-      <input type="text" id="cd-raw" placeholder="11010519491231002" value="11010519491231002">
-      <div class="act"><button class="pri" data-act="id/checkdigit">计算校验位</button></div>
-      <div class="out" id="out-cd"></div>
-    </div>
+<div class="acc" data-key="id/checkdigit" data-out="out-cd">
+  <button class="acc-h"><span class="arw">▶</span>17 位补校验位</button>
+  <div class="acc-b">
+    <div class="f"><label>前 17 位</label>
+      <input type="text" id="cd-raw" value="11010519491231002" placeholder="11010519491231002"></div>
+    <div class="go"><button class="pri" data-act="id/checkdigit">计算校验位</button></div>
+    <div class="out" id="out-cd"></div>
   </div>
+</div>
 
-  <div class="panel" id="id-info">
-    <div class="card">
-      <label>完整 18 位号码</label>
-      <input type="text" id="info-raw" placeholder="440305199003070014" value="440305199003070014">
-      <div class="act"><button class="pri" data-act="id/info">提取信息</button></div>
-      <div class="out" id="out-info"></div>
-    </div>
+<div class="acc" data-key="id/info" data-out="out-info">
+  <button class="acc-h"><span class="arw">▶</span>信息提取</button>
+  <div class="acc-b">
+    <div class="f"><label>完整 18 位</label>
+      <input type="text" id="info-raw" value="440305199003070014" placeholder="440305199003070014"></div>
+    <div class="go"><button class="pri" data-act="id/info">提取</button></div>
+    <div class="out" id="out-info"></div>
   </div>
+</div>
 
-  <div class="panel" id="id-derive">
-    <div class="card">
-      <div class="row">
-        <div><label>生肖</label><select id="dv-sx"></select></div>
-        <div><label>星座</label><select id="dv-xz"></select></div>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <div><label>最小年龄</label><input type="number" id="dv-a1" placeholder="如 30"></div>
-        <div><label>最大年龄</label><input type="number" id="dv-a2" placeholder="如 40"></div>
-      </div>
-      <div class="hint">至少填一项，否则候选日期会覆盖 1900 年至今</div>
-      <div class="act"><button class="pri" data-act="id/derive">反推生日</button></div>
-      <div class="out" id="out-derive"></div>
+<div class="acc" data-key="id/derive" data-out="out-derive">
+  <button class="acc-h"><span class="arw">▶</span>按生肖 / 星座反推</button>
+  <div class="acc-b">
+    <div class="row">
+      <div class="f"><label>生肖</label><select id="dv-sx"></select></div>
+      <div class="f"><label>星座</label><select id="dv-xz"></select></div>
     </div>
-  </div>
-
-  <div class="panel" id="id-batch">
-    <div class="card">
-      <label>号码列表（每行一个，空行和 # 开头的行会跳过）</label>
-      <textarea id="batch-text" placeholder="11010519491231002X&#10;110105194912310021&#10;123"></textarea>
-      <div class="act"><button class="pri" data-act="id/batch">批量校验</button></div>
-      <div class="out" id="out-batch"></div>
+    <div class="row" style="margin-top:12px">
+      <div class="f"><label>最小年龄</label><input type="number" id="dv-a1" placeholder="30"></div>
+      <div class="f"><label>最大年龄</label><input type="number" id="dv-a2" placeholder="40"></div>
     </div>
+    <div class="hint">至少填一项，否则会覆盖 1900 年至今</div>
+    <div class="go"><button class="pri" data-act="id/derive">反推生日</button></div>
+    <div class="out" id="out-derive"></div>
   </div>
-</section>
+</div>
 
-<!-- ==================== 手机号 ==================== -->
-<section id="tab-phone" style="display:none">
-  <nav class="subs" data-group="phone">
-    <button class="on" data-sub="lookup">归属地查询</button>
-    <button data-sub="pbrute">前三后二穷举</button>
-    <button data-sub="seg">号段反查</button>
-    <button data-sub="fmt">格式化 / 脱敏</button>
-  </nav>
+<div class="acc" data-key="id/batch" data-out="out-batch">
+  <button class="acc-h"><span class="arw">▶</span>批量校验</button>
+  <div class="acc-b">
+    <div class="f"><label>号码列表（每行一个，# 开头跳过）</label>
+      <textarea id="batch-text" placeholder="11010519491231002X&#10;110105194912310021&#10;123"></textarea></div>
+    <div class="go"><button class="pri" data-act="id/batch">批量校验</button></div>
+    <div class="out" id="out-batch"></div>
+  </div>
+</div>
 
-  <div class="panel on" id="phone-lookup">
-    <div class="card">
-      <label>手机号（多个用空格或逗号分隔）</label>
-      <textarea id="lk-text" placeholder="13800138000&#10;19912345678,16612345678">13800138000</textarea>
-      <div class="act"><button class="pri" data-act="phone/lookup">查询</button></div>
-      <div class="out" id="out-lookup"></div>
+<div class="gt">手机号</div>
+
+<div class="acc" data-key="phone/lookup" data-out="out-lookup">
+  <button class="acc-h"><span class="arw">▶</span>归属地查询</button>
+  <div class="acc-b">
+    <div class="f"><label>手机号（空格或逗号分隔）</label>
+      <textarea id="lk-text">13800138000</textarea></div>
+    <div class="go"><button class="pri" data-act="phone/lookup">查询</button></div>
+    <div class="out" id="out-lookup"></div>
+  </div>
+</div>
+
+<div class="acc" data-key="phone/brute" data-out="out-pbrute">
+  <button class="acc-h"><span class="arw">▶</span>前三后二穷举</button>
+  <div class="acc-b">
+    <div class="row">
+      <div class="f"><label>前三位</label><input type="text" id="pb-seg3" value="138" maxlength="3"></div>
+      <div class="f"><label>后两位</label><input type="text" id="pb-last2" value="88" maxlength="2"></div>
     </div>
+    <div class="f" style="margin-top:12px"><label>归属地筛选（可选）</label>
+      <input type="text" id="pb-region" placeholder="留空 = 中间全排列 100 万"></div>
+    <div class="go"><button class="pri" data-act="phone/brute">穷举</button></div>
+    <div class="out" id="out-pbrute"></div>
   </div>
+</div>
 
-  <div class="panel" id="phone-pbrute">
-    <div class="card">
-      <div class="row">
-        <div><label>前三位</label><input type="text" id="pb-seg3" placeholder="138" value="138" maxlength="3"></div>
-        <div><label>后两位</label><input type="text" id="pb-last2" placeholder="88" value="88" maxlength="2"></div>
-      </div>
-      <label style="margin-top:12px">归属地筛选（可选，如 北京 / 唐山；留空 = 中间全排列 100 万）</label>
-      <input type="text" id="pb-region" placeholder="留空则不筛选">
-      <div class="act"><button class="pri" data-act="phone/brute">穷举</button></div>
-      <div class="out" id="out-pbrute"></div>
-    </div>
+<div class="acc" data-key="phone/seg" data-out="out-seg">
+  <button class="acc-h"><span class="arw">▶</span>号段反查</button>
+  <div class="acc-b">
+    <div class="f"><label>地区关键字</label>
+      <input type="text" id="seg-kw" placeholder="北京 / 唐山 / 深圳"></div>
+    <div class="hint">全库检索约 1.5 秒</div>
+    <div class="go"><button class="pri" data-act="phone/seg">反查</button></div>
+    <div class="out" id="out-seg"></div>
   </div>
+</div>
 
-  <div class="panel" id="phone-seg">
-    <div class="card">
-      <label>地区关键字</label>
-      <input type="text" id="seg-kw" placeholder="北京 / 唐山 / 深圳">
-      <div class="hint">全库检索约 1.5 秒</div>
-      <div class="act"><button class="pri" data-act="phone/seg">反查号段</button></div>
-      <div class="out" id="out-seg"></div>
-    </div>
-  </div>
-
-  <div class="panel" id="phone-fmt">
-    <div class="card">
-      <div class="radios" id="fmt-modes">
+<div class="acc" data-key="phone/format" data-out="out-fmt">
+  <button class="acc-h"><span class="arw">▶</span>格式化 / 脱敏</button>
+  <div class="acc-b">
+    <div class="f"><label>处理方式</label>
+      <div class="seg">
         <label><input type="radio" name="fmt" value="1" checked>格式化</label>
         <label><input type="radio" name="fmt" value="2">脱敏</label>
         <label><input type="radio" name="fmt" value="3">清洗</label>
         <label><input type="radio" name="fmt" value="4">国际码</label>
-      </div>
-      <label style="margin-top:12px">号码（多个用空格或逗号分隔）</label>
-      <textarea id="fmt-text" placeholder="13800138000&#10;+8616600138000">13800138000
-+8616600138000</textarea>
-      <div class="act"><button class="pri" data-act="phone/format">处理</button></div>
-      <div class="out" id="out-fmt"></div>
-    </div>
+      </div></div>
+    <div class="f"><label>号码（空格或逗号分隔）</label>
+      <textarea id="fmt-text">13800138000
++8616600138000</textarea></div>
+    <div class="go"><button class="pri" data-act="phone/format">处理</button></div>
+    <div class="out" id="out-fmt"></div>
   </div>
-</section>
+</div>
+
 </main>
 
 <footer>结果仅保证格式与校验位合法 · 请仅用于本人证件或已获授权的合法用途</footer>
@@ -244,47 +242,32 @@ async function api(path, data){
   });
   return await r.json();
 }
+const show = (id, html) => { $('#'+id).innerHTML = html; };
+const err  = m => '<div class="banner err">'+esc(m)+'</div>';
+const kv = o => '<div class="kv">' + Object.entries(o).map(([k,v]) =>
+  '<b>'+esc(k)+'</b><span>'+esc(v)+'</span>').join('') + '</div>';
+const list = (items, cls) => '<pre class="'+(cls||'')+'">' + items.map(esc).join('\n') + '</pre>';
+const table = (hs, rows) => '<table><thead><tr>' + hs.map(h=>'<th>'+esc(h)+'</th>').join('') +
+  '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(c=>'<td>'+c+'</td>').join('') + '</tr>').join('') +
+  '</tbody></table>';
+const stat = pairs => '<div class="stat">' + pairs.map(([k,v]) => esc(k)+': <b>'+esc(v)+'</b>').join('') + '</div>';
 
-function show(id, html){ const el = $('#'+id); el.innerHTML = html; }
-function kv(obj){
-  return '<div class="kv">' + Object.entries(obj).map(([k,v]) =>
-    '<b>'+esc(k)+'</b><span>'+esc(v)+'</span>').join('') + '</div>';
-}
-function list(items, cls){
-  return '<pre class="'+(cls||'')+'">' + items.map(esc).join('\n') + '</pre>';
-}
-function table(headers, rows){
-  return '<table><thead><tr>' + headers.map(h=>'<th>'+esc(h)+'</th>').join('') +
-    '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(c=>'<td>'+c+'</td>').join('') + '</tr>').join('') +
-    '</tbody></table>';
-}
-function stat(pairs){
-  return '<div class="stat">' + pairs.map(([k,v]) => esc(k)+': <b>'+esc(v)+'</b>').join('') + '</div>';
-}
-function err(msg){ return '<div class="banner err">'+esc(msg)+'</div>'; }
-
-/* ---------------- 标签切换 ---------------- */
-$$('nav.tabs button').forEach(b => b.onclick = () => {
-  $$('nav.tabs button').forEach(x => x.classList.toggle('on', x===b));
-  $('#tab-id').style.display = b.dataset.tab==='id' ? '' : 'none';
-  $('#tab-phone').style.display = b.dataset.tab==='phone' ? '' : 'none';
-});
-$$('nav.subs').forEach(nav => {
-  const group = nav.dataset.group;
-  nav.querySelectorAll('button').forEach(b => b.onclick = () => {
-    nav.querySelectorAll('button').forEach(x => x.classList.toggle('on', x===b));
-    document.querySelectorAll('#'+group+' .panel').forEach(p => p.classList.remove('on'));
-    $('#'+group+'-'+b.dataset.sub).classList.add('on');
-  });
+/* 折叠面板：同时只开一个 */
+$$('.acc').forEach(a => {
+  a.querySelector('.acc-h').onclick = () => {
+    const open = a.classList.contains('on');
+    $$('.acc').forEach(x => x.classList.remove('on'));
+    if(!open) a.classList.add('on');
+  };
 });
 
-/* ---------------- 下拉选项 ---------------- */
+/* 下拉选项 */
 const SX = ['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'];
 const XZ = ['水瓶','双鱼','白羊','金牛','双子','巨蟹','狮子','处女','天秤','天蝎','射手','摩羯'];
 $('#dv-sx').innerHTML = '<option value="">不限</option>' + SX.map(v=>'<option>'+v+'</option>').join('');
 $('#dv-xz').innerHTML = '<option value="">不限</option>' + XZ.map(v=>'<option>'+v+'</option>').join('');
 
-/* ---------------- 各功能 ---------------- */
+/* 各功能 */
 const actions = {
   'id/brute': async () => {
     const g = document.querySelector('input[name=brute-g]:checked').value;
@@ -296,34 +279,30 @@ const actions = {
     if(d.errors && d.errors.length) h += '<div class="banner warn">校验提示：'+d.errors.map(esc).join('；')+'</div>';
     if(d.infos && d.infos.length) h += '<div class="hint">'+d.infos.map(esc).join(' · ')+'</div>';
     h += list(d.results);
-    if(d.truncated) h += '<div class="hint">结果过多，仅显示前 5000 条</div>';
-    show('out-brute', h);
+    if(d.truncated) h += '<div class="hint">仅显示前 5000 条</div>';
+    return h;
   },
   'id/check': async () => {
     const r = await api('id/check', {raw:$('#check-raw').value});
     if(!r.ok) return err(r.error);
     const d = r.data;
-    if(d.format_error) return show('out-check', err('格式错误：'+d.format_error));
-    const rows = d.checks.map(c => {
-      const mark = c.pass===true ? '<span class="ok">[通过]</span>'
-                 : c.pass===false ? '<span class="err">[不通过]</span>'
-                 : '<span class="dim">[跳过]</span>';
-      return [mark, esc(c.name), esc(c.detail)];
-    });
+    if(d.format_error) return err('格式错误：'+d.format_error);
     let h = '<div class="banner '+(d.valid?'ok':'err')+'">' +
       (d.valid ? '通过全部校验，格式合法' : '未通过校验，不是合法的身份证号') + '</div>';
-    h += table(['','项目','说明'], rows);
+    h += table(['','项目','说明'], d.checks.map(c => [
+      c.pass===true ? '<span class="ok">[通过]</span>'
+        : c.pass===false ? '<span class="err">[不通过]</span>' : '<span class="dim">[跳过]</span>',
+      esc(c.name), esc(c.detail)]));
     h += '<div class="hint">性别(参考)：'+esc(d.gender)+'</div>';
-    show('out-check', h);
+    return h;
   },
   'id/checkdigit': async () => {
     const r = await api('id/checkdigit', {raw:$('#cd-raw').value});
     if(!r.ok) return err(r.error);
     const d = r.data;
-    let h = kv({ '前17位':d.prefix, '校验位':d.check, '完整号':d.full,
-                 '出生':d.birth, '性别':d.gender });
+    let h = kv({ '前17位':d.prefix, '校验位':d.check, '完整号':d.full, '出生':d.birth, '性别':d.gender });
     if(!d.date_ok) h += '<div class="banner warn">'+esc(d.date_msg)+'</div>';
-    show('out-cd', h);
+    return h;
   },
   'id/info': async () => {
     const r = await api('id/info', {raw:$('#info-raw').value});
@@ -333,18 +312,16 @@ const actions = {
                  '年龄':(d.age!=null?d.age+' 周岁':'-'), '生肖':d.zodiac||'-',
                  '星座':d.constellation||'-', '性别':d.gender });
     if(d.warn) h += '<div class="banner warn">'+esc(d.warn)+'</div>';
-    show('out-info', h);
+    return h;
   },
   'id/derive': async () => {
-    const r = await api('id/derive', {
-      zodiac:$('#dv-sx').value, constellation:$('#dv-xz').value,
-      age_min:$('#dv-a1').value, age_max:$('#dv-a2').value });
+    const r = await api('id/derive', {zodiac:$('#dv-sx').value, constellation:$('#dv-xz').value,
+      age_min:$('#dv-a1').value, age_max:$('#dv-a2').value});
     if(!r.ok) return err(r.error);
     const d = r.data;
-    let h = stat([['候选生日', d.count]]);
-    h += list(d.birthdays);
+    let h = stat([['候选生日', d.count]]) + list(d.birthdays);
     if(d.truncated) h += '<div class="hint">仅显示前 3000 条</div>';
-    show('out-derive', h);
+    return h;
   },
   'id/batch': async () => {
     const r = await api('id/batch', {text:$('#batch-text').value});
@@ -353,28 +330,25 @@ const actions = {
     let h = stat([['合计', d.total], ['合法', d.ok], ['不合法', d.bad]]);
     h += table(['号码','结果','说明'], d.rows.map(x => [
       '<span class="mono">'+esc(x.input)+'</span>',
-      x.ok ? '<span class="ok">合法</span>' : '<span class="err">不合法</span>',
-      esc(x.reason)]));
-    show('out-batch', h);
+      x.ok ? '<span class="ok">合法</span>' : '<span class="err">不合法</span>', esc(x.reason)]));
+    return h;
   },
   'phone/lookup': async () => {
     const r = await api('phone/lookup', {text:$('#lk-text').value});
     if(!r.ok) return err(r.error);
-    const rows = r.data.rows.map(x => x.ok
+    return table(['号码','归属地','运营商','邮编','区号'], r.data.rows.map(x => x.ok
       ? ['<span class="mono">'+esc(x.input)+'</span>', '<span class="ok">'+esc(x.region)+'</span>',
          esc(x.type), esc(x.zip), esc(x.area||'-')]
-      : ['<span class="mono">'+esc(x.input)+'</span>', '<span class="err">'+esc(x.reason)+'</span>','','','']);
-    show('out-lookup', table(['号码','归属地','运营商','邮编','区号'], rows));
+      : ['<span class="mono">'+esc(x.input)+'</span>', '<span class="err">'+esc(x.reason)+'</span>','','','']));
   },
   'phone/brute': async () => {
-    const r = await api('phone/brute', {
-      seg3:$('#pb-seg3').value, last2:$('#pb-last2').value, region:$('#pb-region').value });
+    const r = await api('phone/brute', {seg3:$('#pb-seg3').value, last2:$('#pb-last2').value,
+      region:$('#pb-region').value});
     if(!r.ok) return err(r.error);
     const d = r.data;
-    let h = stat([['总数', d.total]]);
-    h += list(d.results);
+    let h = stat([['总数', d.total]]) + list(d.results);
     if(d.truncated) h += '<div class="hint">仅显示前 20000 条</div>';
-    show('out-pbrute', h);
+    return h;
   },
   'phone/seg': async () => {
     const r = await api('phone/seg', {keyword:$('#seg-kw').value});
@@ -382,102 +356,93 @@ const actions = {
     const d = r.data;
     let h = stat([['匹配号段', d.total], ['归属地', d.groups.length]]);
     d.groups.forEach(g => {
-      h += '<div style="margin:12px 0 4px"><b>'+esc(g.name)+' '+esc(g.type)+'</b> ' +
+      h += '<div style="margin:12px 0 2px"><b>'+esc(g.name)+' '+esc(g.type)+'</b> ' +
            '<span class="tag">'+g.count+' 个号段</span></div>';
-      h += '<div class="grid-seg">' + g.segments.map(s=>'<span>'+esc(s)+'</span>').join('') + '</div>';
+      h += '<div class="segs">' + g.segments.map(s=>'<span>'+esc(s)+'</span>').join('') + '</div>';
     });
-    show('out-seg', h);
+    return h;
   },
   'phone/format': async () => {
     const mode = document.querySelector('input[name=fmt]:checked').value;
     const r = await api('phone/format', {mode:mode, text:$('#fmt-text').value});
     if(!r.ok) return err(r.error);
-    const rows = r.data.rows.map(x => x.ok
+    return table(['输入','结果'], r.data.rows.map(x => x.ok
       ? ['<span class="mono">'+esc(x.input)+'</span>', '<span class="mono ok">'+esc(x.result)+'</span>']
-      : ['<span class="mono">'+esc(x.input)+'</span>', '<span class="err">'+esc(x.reason)+'</span>']);
-    show('out-fmt', table(['输入','结果'], rows));
+      : ['<span class="mono">'+esc(x.input)+'</span>', '<span class="err">'+esc(x.reason)+'</span>']));
   },
 };
 
 $$('button[data-act]').forEach(b => {
   b.onclick = async () => {
     const key = b.dataset.act;
-    const out = b.closest('.card').querySelector('.out');
+    const acc = b.closest('.acc');
+    const out = acc.querySelector('.out');
     b.disabled = true;
     out.innerHTML = '<div class="hint">处理中…</div>';
-    try { await actions[key](); }
-    catch(e){ show(out.id, err('请求失败：'+e.message)); }
+    try { out.innerHTML = await actions[key](); }
+    catch(e){ out.innerHTML = err('请求失败：'+e.message); }
     finally { b.disabled = false; }
   };
 });
 
-/* ---------------- 版本与更新 ---------------- */
+/* 版本与更新 */
 async function loadVersion(){
-  try{
-    const r = await api('version', {});
+  try{ const r = await api('version', {});
     if(r.ok) $('#ver').textContent = 'v' + r.data.version;
   }catch(e){}
 }
 async function checkUpdate(){
-  const box = $('#tab-update-msg');
+  const box = $('#msg');
   box.innerHTML = '<div class="banner">正在检查更新…</div>';
   try{
     const r = await api('check_update', {});
     if(!r.ok){ box.innerHTML = err(r.error); return; }
     const d = r.data;
     if(d.error){ box.innerHTML = '<div class="banner warn">'+esc(d.error)+'</div>'; return; }
-
     if(d.newer){
-      box.innerHTML =
-        '<div class="banner warn">发现新版本 <b>'+esc(d.remote)+'</b>（当前 '+esc(d.local)+'）' +
-        '<div class="act" style="margin-top:10px">' +
-        '<button class="pri sm" id="btnDoUpd">立即更新</button>' +
-        '<button class="sm" id="btnSkipVer">跳过此版本</button>' +
-        '<button class="sm" id="btnMute">屏蔽所有更新</button>' +
-        '<button class="sm" id="btnCloseMsg">关闭</button>' +
-        '</div></div>';
-      $('#btnDoUpd').onclick = () => doUpdate(box);
-      $('#btnSkipVer').onclick = async () => {
-        await api('skip', {version: d.remote});
+      box.innerHTML = '<div class="banner warn">发现新版本 <b>'+esc(d.remote)+'</b>（当前 '+esc(d.local)+'）' +
+        '<div class="row" style="margin-top:10px">' +
+        '<button class="pri sm" id="bUpd">立即更新</button>' +
+        '<button class="sm" id="bSkip">跳过此版本</button>' +
+        '<button class="sm" id="bMute">屏蔽所有更新</button>' +
+        '<button class="sm" id="bClose">关闭</button></div></div>';
+      $('#bUpd').onclick = () => doUpdate(box);
+      $('#bSkip').onclick = async () => {
+        await api('skip', {version:d.remote});
         box.innerHTML = '<div class="banner ok">已跳过版本 '+esc(d.remote)+'</div>';
         setTimeout(()=>{ box.innerHTML=''; }, 4000);
       };
-      $('#btnMute').onclick = async () => {
+      $('#bMute').onclick = async () => {
         await api('mute', {muted:true});
         box.innerHTML = '<div class="banner ok">已屏蔽所有更新提示' +
           '<br><span class="dim">恢复：终端执行 toolbox --unmute</span></div>';
         setTimeout(()=>{ box.innerHTML=''; }, 5000);
       };
-      $('#btnCloseMsg').onclick = () => { box.innerHTML=''; };
-
-    } else if (d.muted) {
+      $('#bClose').onclick = () => { box.innerHTML=''; };
+    } else if(d.muted){
       box.innerHTML = '<div class="banner dim">更新检查已屏蔽' +
         '<br>恢复：终端执行 <span class="mono">toolbox --unmute</span></div>';
       setTimeout(()=>{ box.innerHTML=''; }, 6000);
-    } else if (d.was_skipped) {
+    } else if(d.was_skipped){
       box.innerHTML = '<div class="banner dim">版本 '+esc(d.remote)+' 已被跳过' +
         '<br>想安装：终端执行 <span class="mono">toolbox --update</span></div>';
       setTimeout(()=>{ box.innerHTML=''; }, 6000);
     } else {
       box.innerHTML = '<div class="banner ok">已是最新版本 ('+esc(d.local)+')</div>';
-      setTimeout(()=>{ box.innerHTML=''; }, 5000);
+      setTimeout(()=>{ box.innerHTML=''; }, 4000);
     }
   }catch(e){ box.innerHTML = err('检查失败：'+e.message); }
 }
-
 async function doUpdate(box){
-  box.innerHTML = '<div class="banner">正在更新…（执行 git pull）</div>';
+  box.innerHTML = '<div class="banner">正在更新…（git pull）</div>';
   try{
     const r = await api('update', {});
     if(!r.ok){ box.innerHTML = err(r.error); return; }
     const d = r.data;
     if(d.ok){
       let h = '<div class="banner ok">更新完成：'+esc(d.before)+' → <b>'+esc(d.after)+'</b>';
-      if(d.changed){
-        h += '<br><b>请重启 Web 服务</b>：终端 Ctrl+C 后重新 <span class="mono">toolbox --web</span>';
-      }
-      h += '</div>';
-      box.innerHTML = h;
+      if(d.changed) h += '<br><b>请重启</b>：终端 Ctrl+C 后重新运行 toolbox';
+      box.innerHTML = h + '</div>';
       loadVersion();
     } else {
       box.innerHTML = '<div class="banner err">更新失败：'+esc(d.message)+'</div>';

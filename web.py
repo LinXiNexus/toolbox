@@ -16,7 +16,9 @@ import argparse
 import json
 import os
 import re
+import shutil
 import socket
+import subprocess
 import sys
 import threading
 import webbrowser
@@ -400,6 +402,30 @@ class Handler(BaseHTTPRequestHandler):
             self._json({"ok": False, "error": "%s: %s" % (type(e).__name__, e)}, 200)
 
 
+def open_url(url):
+    """尝试用系统方式打开浏览器(Termux 优先)"""
+    if shutil.which("termux-open-url"):
+        try:
+            subprocess.Popen(["termux-open-url", url],
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            return True
+        except Exception:
+            pass
+    for c in ("xdg-open", "open"):
+        if shutil.which(c):
+            try:
+                subprocess.Popen([c, url],
+                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return True
+            except Exception:
+                pass
+    try:
+        import webbrowser
+        return webbrowser.open(url)
+    except Exception:
+        return False
+
+
 def port_free(host, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -412,33 +438,40 @@ def port_free(host, port):
         s.close()
 
 
-def serve(host="127.0.0.1", port=DEFAULT_PORT, open_browser=False):
+def serve(host="127.0.0.1", port=DEFAULT_PORT, open_browser=False, quiet=False):
     if not port_free(host, port):
-        print("启动失败: 端口 %d 已被占用" % port, file=sys.stderr)
-        print("换个端口: python3 web.py --port %d" % (port + 1), file=sys.stderr)
+        if not quiet:
+            print("启动失败: 端口 %d 已被占用" % port, file=sys.stderr)
+            print("换个端口: python3 web.py --port %d" % (port + 1), file=sys.stderr)
         return 1
     srv = ThreadingHTTPServer((host, port), Handler)
     srv.daemon_threads = True
     url = "http://%s:%d/" % (host if host != "0.0.0.0" else "127.0.0.1", port)
-    print("=" * 52)
-    print("  常用工具集 - Web 界面")
-    print("=" * 52)
-    print("  版本    : v%s" % updater.local_version())
-    print("  访问地址: %s" % url)
-    if host == "0.0.0.0":
-        print("  [注意]  已监听所有网卡，局域网内其他设备可访问")
-    print("  停止    : Ctrl+C")
-    print("=" * 52)
-    sys.stdout.flush()
+    if not quiet:
+        print("=" * 52)
+        print("  常用工具集 - Web 界面")
+        print("=" * 52)
+        print("  版本    : v%s" % updater.local_version())
+        print("  访问地址: %s" % url)
+        if host == "0.0.0.0":
+            print("  [注意]  已监听所有网卡，局域网内其他设备可访问")
+        print("  停止    : Ctrl+C")
+        print("=" * 52)
+        sys.stdout.flush()
     if open_browser:
-        threading.Thread(target=lambda: webbrowser.open(url), daemon=True).start()
+        threading.Thread(target=lambda: open_url(url), daemon=True).start()
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
-        print("\n已停止")
+        if not quiet:
+            print("\n已停止")
     finally:
         srv.server_close()
     return 0
+
+
+def web_url(port=DEFAULT_PORT):
+    return "http://127.0.0.1:%d/" % port
 
 
 def main():
