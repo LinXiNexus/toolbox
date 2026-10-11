@@ -6,7 +6,8 @@ venv/
 *.log
 .DS_Store
 *.bak
-dist/
+dist/*
+!dist/toolbox-standalone.pyz
 .build_tmp/
 *.c
 *.so
