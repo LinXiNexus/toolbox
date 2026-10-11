@@ -426,14 +426,63 @@ async function checkUpdate(){
     if(!r.ok){ box.innerHTML = err(r.error); return; }
     const d = r.data;
     if(d.error){ box.innerHTML = '<div class="banner warn">'+esc(d.error)+'</div>'; return; }
+
     if(d.newer){
-      box.innerHTML = '<div class="banner warn">发现新版本 <b>'+esc(d.remote)+'</b>（当前 '+esc(d.local)+'）' +
-        '<br>在终端执行：<span class="mono">toolbox --update</span></div>';
+      box.innerHTML =
+        '<div class="banner warn">发现新版本 <b>'+esc(d.remote)+'</b>（当前 '+esc(d.local)+'）' +
+        '<div class="act" style="margin-top:10px">' +
+        '<button class="pri sm" id="btnDoUpd">立即更新</button>' +
+        '<button class="sm" id="btnSkipVer">跳过此版本</button>' +
+        '<button class="sm" id="btnMute">屏蔽所有更新</button>' +
+        '<button class="sm" id="btnCloseMsg">关闭</button>' +
+        '</div></div>';
+      $('#btnDoUpd').onclick = () => doUpdate(box);
+      $('#btnSkipVer').onclick = async () => {
+        await api('skip', {version: d.remote});
+        box.innerHTML = '<div class="banner ok">已跳过版本 '+esc(d.remote)+'</div>';
+        setTimeout(()=>{ box.innerHTML=''; }, 4000);
+      };
+      $('#btnMute').onclick = async () => {
+        await api('mute', {muted:true});
+        box.innerHTML = '<div class="banner ok">已屏蔽所有更新提示' +
+          '<br><span class="dim">恢复：终端执行 toolbox --unmute</span></div>';
+        setTimeout(()=>{ box.innerHTML=''; }, 5000);
+      };
+      $('#btnCloseMsg').onclick = () => { box.innerHTML=''; };
+
+    } else if (d.muted) {
+      box.innerHTML = '<div class="banner dim">更新检查已屏蔽' +
+        '<br>恢复：终端执行 <span class="mono">toolbox --unmute</span></div>';
+      setTimeout(()=>{ box.innerHTML=''; }, 6000);
+    } else if (d.was_skipped) {
+      box.innerHTML = '<div class="banner dim">版本 '+esc(d.remote)+' 已被跳过' +
+        '<br>想安装：终端执行 <span class="mono">toolbox --update</span></div>';
+      setTimeout(()=>{ box.innerHTML=''; }, 6000);
     } else {
       box.innerHTML = '<div class="banner ok">已是最新版本 ('+esc(d.local)+')</div>';
+      setTimeout(()=>{ box.innerHTML=''; }, 5000);
     }
-    setTimeout(()=>{ box.innerHTML=''; }, 6000);
   }catch(e){ box.innerHTML = err('检查失败：'+e.message); }
+}
+
+async function doUpdate(box){
+  box.innerHTML = '<div class="banner">正在更新…（执行 git pull）</div>';
+  try{
+    const r = await api('update', {});
+    if(!r.ok){ box.innerHTML = err(r.error); return; }
+    const d = r.data;
+    if(d.ok){
+      let h = '<div class="banner ok">更新完成：'+esc(d.before)+' → <b>'+esc(d.after)+'</b>';
+      if(d.changed){
+        h += '<br><b>请重启 Web 服务</b>：终端 Ctrl+C 后重新 <span class="mono">toolbox --web</span>';
+      }
+      h += '</div>';
+      box.innerHTML = h;
+      loadVersion();
+    } else {
+      box.innerHTML = '<div class="banner err">更新失败：'+esc(d.message)+'</div>';
+    }
+  }catch(e){ box.innerHTML = err('更新失败：'+e.message); }
 }
 $('#btnCheck').onclick = checkUpdate;
 loadVersion();

@@ -278,10 +278,43 @@ def api_version(d):
 
 def api_check_update(d):
     info = updater.check(force=True)
+    cfg = updater.load_config()
     return {"local": info.get("local"), "remote": info.get("remote"),
             "has_update": bool(info.get("has_update")), "newer": bool(info.get("newer")),
             "was_skipped": bool(info.get("was_skipped")),
-            "muted": bool(info.get("muted")), "error": info.get("error")}
+            "muted": bool(cfg["muted"]), "error": info.get("error")}
+
+
+def api_do_update(d):
+    """执行 git pull 更新"""
+    before = updater.local_version()
+    ok, msg = updater.do_update()
+    after = updater.local_version()
+    return {"ok": ok, "message": msg, "before": before, "after": after,
+            "changed": before != after, "is_git": updater.project_is_git()}
+
+
+def api_skip_version(d):
+    v = str(d.get("version", "")).strip()
+    cfg = updater.load_config()
+    if v and v not in cfg["skipped"]:
+        cfg["skipped"].append(v)
+        updater.save_config(cfg)
+    return {"skipped": cfg["skipped"]}
+
+
+def api_mute(d):
+    cfg = updater.load_config()
+    cfg["muted"] = bool(d.get("muted", True))
+    cfg["last_check"] = 0
+    updater.save_config(cfg)
+    return {"muted": cfg["muted"]}
+
+
+def api_config(d):
+    cfg = updater.load_config()
+    return {"skipped": cfg["skipped"], "muted": cfg["muted"],
+            "interval": cfg.get("interval"), "version": updater.local_version()}
 
 
 ROUTES = {
@@ -297,6 +330,10 @@ ROUTES = {
     "/api/phone/format": api_phone_format,
     "/api/version": api_version,
     "/api/check_update": api_check_update,
+    "/api/update": api_do_update,
+    "/api/skip": api_skip_version,
+    "/api/mute": api_mute,
+    "/api/config": api_config,
 }
 
 
