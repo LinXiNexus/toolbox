@@ -55,22 +55,24 @@ printf "\n"
 
 # ---------------------------------------------------------------- 1. 认证
 step "1/5  检查认证"
-if ! command -v gh >/dev/null 2>&1; then
-    err "未安装 gh"
-    info "  pkg install gh"
-    exit 1
-fi
-if ! gh auth status >/dev/null 2>&1; then
-    err "gh 未登录"
+TOKEN=""
+for f in "$HOME/gh_token.txt" "$HOME/.gh_token"; do
+    [ -f "$f" ] && TOKEN="$(cat "$f" | tr -d '\n\r ')" && break
+done
+[ -n "$TOKEN" ] || TOKEN="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
+if [ -z "$TOKEN" ]; then
+    err "没有找到 GitHub token"
     info ""
-    info "  两种方式二选一:"
-    info "    1) 运行  gh auth login  跟着提示走"
-    info "    2) 生成 Personal Access Token (勾选 repo 权限)"
-    info "       存到 ~/gh_token.txt, 然后执行:"
-    info "         export GH_TOKEN=\$(cat ~/gh_token.txt)"
+    info "  创建一个(权限只需 Contents: Read and write):"
+    info "    细粒度: https://github.com/settings/personal-access-tokens/new"
+    info "    经典:   https://github.com/settings/tokens/new"
+    info ""
+    info "  存起来:"
+    info "    echo '你的token' > ~/gh_token.txt && chmod 600 ~/gh_token.txt"
     exit 1
 fi
-ok "gh 已登录: $(gh auth status 2>&1 | grep -o 'account [^ ]*' | head -1)"
+export GH_TOKEN="$TOKEN"
+ok "已找到 token (${#TOKEN} 字符)"
 
 # ---------------------------------------------------------------- 2. 提交
 step "2/5  提交改动"
@@ -104,27 +106,12 @@ fi
 
 # ---------------------------------------------------------------- 5. 发布
 step "5/5  上传 Release"
-if gh release view "$TAG" >/dev/null 2>&1; then
-    warn "Release $TAG 已存在, 改为上传/覆盖附件"
-    gh release upload "$TAG" "$ASSET" --clobber && ok "已更新附件"
+PY_ARGS=()
+[ "$DRAFT" = 1 ] && PY_ARGS+=(--draft)
+if python3 "$DIR/publish_release.py" "${PY_ARGS[@]}"; then
+    ok "发布成功"
 else
-    NOTES="$DIR/RELEASE_NOTES.md"
-    ARGS=(release create "$TAG" "$ASSET" --title "常用工具集 $TAG")
-    [ -f "$NOTES" ] && ARGS+=(--notes-file "$NOTES") || ARGS+=(--generate-notes)
-    [ "$DRAFT" = 1 ] && ARGS+=(--draft)
-    if gh "${ARGS[@]}"; then
-        ok "发布成功"
-    else
-        err "发布失败"
-        exit 1
-    fi
+    err "发布失败"
+    exit 1
 fi
-
-printf "\n"
-printf "%s\n" "=============================================="
-ok "完成"
-printf "%s\n" "=============================================="
-REPO_URL="$(git remote get-url origin 2>/dev/null | sed 's#git@github.com:#https://github.com/#' | sed 's#\.git$##')"
-printf "  Release 页面: %s/releases/tag/%s\n" "$REPO_URL" "$TAG"
-printf "  下载地址    : %s/releases/download/%s/toolbox-standalone.pyz\n" "$REPO_URL" "$TAG"
 printf "\n"
