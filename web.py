@@ -320,6 +320,33 @@ def api_config(d):
             "interval": cfg.get("interval"), "version": updater.local_version()}
 
 
+MANIFEST = {
+    "name": "常用工具集",
+    "short_name": "工具集",
+    "description": "身份证 / 手机号查询工具集",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0f1115",
+    "theme_color": "#0f1115",
+    "lang": "zh-CN",
+    "icons": [
+        {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    ],
+}
+
+ICON_SVG = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+<rect width="192" height="192" rx="42" fill="#0f1115"/>
+<rect x="28" y="44" width="136" height="104" rx="16" fill="#3fc1c9"/>
+<circle cx="70" cy="80" r="14" fill="#0f1115"/>
+<path d="M50 128q20-24 40 0" stroke="#0f1115" stroke-width="8" fill="none" stroke-linecap="round"/>
+<rect x="112" y="68" width="36" height="8" rx="4" fill="#0f1115"/>
+<rect x="112" y="88" width="36" height="8" rx="4" fill="#0f1115"/>
+<rect x="112" y="108" width="24" height="8" rx="4" fill="#0f1115"/>
+</svg>
+"""
+
 ROUTES = {
     "/api/id/brute": api_id_brute,
     "/api/id/check": api_id_check,
@@ -374,8 +401,15 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 self._send(500, "找不到 webui.html", "text/plain; charset=utf-8")
             return
+        if path in ("/manifest.webmanifest", "/manifest.json"):
+            self._send(200, json.dumps(MANIFEST, ensure_ascii=False),
+                       "application/manifest+json; charset=utf-8")
+            return
+        if path == "/icon.svg":
+            self._send(200, ICON_SVG, "image/svg+xml")
+            return
         if path == "/favicon.ico":
-            self._send(204, b"", "image/x-icon")
+            self._send(200, ICON_SVG, "image/svg+xml")
             return
         self._send(404, "not found", "text/plain; charset=utf-8")
 
