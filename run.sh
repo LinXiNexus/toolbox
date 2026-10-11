@@ -140,9 +140,8 @@ case "${1:-}" in
             check_data && ok "数据文件齐备"
         fi
         exit 0 ;;
-    "") ;;
-    *)  err "未知参数: $1"; usage; exit 1 ;;
 esac
+# 其余参数原样交给 main.py (如 --check / --update / --version)
 
 # ---------------------------------------------------------------- 环境检查
 printf "%s\n" "=============================================="
@@ -185,4 +184,4 @@ if [ ! -f "$DIR/main.py" ]; then
     exit 1
 fi
 
-exec "$PY" "$DIR/main.py"
+exec "$PY" "$DIR/main.py" "$@"

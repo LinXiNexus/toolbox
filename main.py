@@ -8,20 +8,24 @@ from common import (line, ask_input, BackToPrev, _center,
                     C_TITLE, C_KEY, C_ERR, C_DIM, C_RST)
 import idcard
 import phone
+import updater
+
 
 def banner():
     W = 44
     print()
     print(C_TITLE + "+" + "=" * W + "+")
     print("|" + _center("常用工具集", W) + "|")
-    print("|" + _center("(交互引导版)", W) + "|")
+    print("|" + _center("v" + updater.local_version(), W) + "|")
     print("+" + "=" * W + "+" + C_RST)
+
 
 def menu():
     print()
     print(" 请选择功能：")
     print("   " + C_KEY + "[1]" + C_RST + " 身份证菜单")
     print("   " + C_KEY + "[2]" + C_RST + " 手机号菜单")
+    print("   " + C_KEY + "[3]" + C_RST + " 检查更新")
     print("   " + C_KEY + "[0]" + C_RST + " 退出")
     print(C_DIM + " 提示: 任意输入处输入 exit 可返回上一层。" + C_RST)
     print()
@@ -34,12 +38,16 @@ def menu():
             return "id"
         if ans == "2":
             return "phone"
+        if ans == "3":
+            return "update"
         if ans in ("0", "q", "quit"):
             return None
-        print(C_ERR + " [错误] 请输入 1 / 2 / 0。" + C_RST)
+        print(C_ERR + " [错误] 请输入 1 / 2 / 3 / 0。" + C_RST)
+
 
 def main():
     banner()
+    updater.maybe_check()
     while True:
         mode = menu()
         if mode is None:
@@ -51,6 +59,8 @@ def main():
                 idcard.run_id_menu()
             elif mode == "phone":
                 phone.run_phone_menu()
+            elif mode == "update":
+                updater.manual_check()
         except BackToPrev:
             pass
         line()
@@ -59,6 +69,8 @@ def main():
 
 if __name__ == "__main__":
     try:
+        if updater.cli(sys.argv[1:]):
+            sys.exit(0)
         main()
     except KeyboardInterrupt:
         print("\n" + C_ERR + "已取消。" + C_RST)
