@@ -6,6 +6,8 @@ import os
 import re
 import struct
 
+import paths
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
 PHONE_TYPES = {1: "移动", 2: "联通", 3: "电信", 4: "电信虚拟运营商",
@@ -26,12 +28,8 @@ class PhoneDB:
 
     @staticmethod
     def _find():
-        for p in [os.path.join(_HERE, "data", "phone.dat"),
-                  os.path.join(_HERE, "phone.dat"),
-                  os.path.expanduser("~/phone.dat")]:
-            if os.path.isfile(p):
-                return p
-        return None
+        """定位号段库(支持源码运行与 zipapp 单文件运行)"""
+        return paths.find_data("phone.dat")
 
     def _load(self):
         with open(self.path, "rb") as f:

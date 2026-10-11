@@ -23,6 +23,8 @@ import sys
 import time
 import urllib.request
 
+import paths
+
 from common import (line, ask_input, BackToPrev,
                     C_TITLE, C_KEY, C_OK, C_ERR, C_WARN, C_DIM, C_RST)
 
@@ -44,11 +46,13 @@ NET_TIMEOUT = 4
 
 
 def local_version():
-    try:
-        with open(os.path.join(HERE, "VERSION"), encoding="utf-8") as f:
-            return f.read().strip() or "0.0.0"
-    except OSError:
-        return "0.0.0"
+    """读取版本号(支持源码运行与 zipapp 单文件运行)"""
+    data = paths.read_resource("VERSION")
+    if data:
+        v = data.decode("utf-8", "ignore").strip()
+        if v:
+            return v
+    return "0.0.0"
 
 
 def parse_ver(v):
@@ -159,10 +163,13 @@ def check(force=False):
 
 
 def project_is_git():
+    """zipapp 单文件模式下没有 git 仓库"""
     return os.path.isdir(os.path.join(HERE, ".git"))
 
 
 def do_update():
+    if paths.is_zipapp():
+        return False, "当前是单文件版，无法自动更新。请用 git 版或重新下载"
     if not project_is_git():
         return False, "当前目录不是 git 仓库，请重新运行 bootstrap.sh 安装"
     try:

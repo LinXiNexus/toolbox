@@ -6,3 +6,7 @@ venv/
 *.log
 .DS_Store
 *.bak
+dist/
+.build_tmp/
+*.c
+*.so

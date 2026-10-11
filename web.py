@@ -27,6 +27,7 @@ from urllib.parse import urlparse
 
 import idbase
 import lunar
+import paths
 import phonedb
 import updater
 
@@ -367,10 +368,10 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = urlparse(self.path).path
         if path in ("/", "/index.html"):
-            try:
-                with open(HTML_FILE, "rb") as f:
-                    self._send(200, f.read(), "text/html; charset=utf-8")
-            except OSError:
+            data = paths.read_resource("webui.html")
+            if data:
+                self._send(200, data, "text/html; charset=utf-8")
+            else:
                 self._send(500, "找不到 webui.html", "text/plain; charset=utf-8")
             return
         if path == "/favicon.ico":

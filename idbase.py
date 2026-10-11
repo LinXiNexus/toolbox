@@ -6,6 +6,8 @@ import os
 import re
 import datetime
 
+import paths
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
 WEIGHTS = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
@@ -29,22 +31,20 @@ def check_digit(first17):
     return CHECK_CODES[s % 11]
 
 def load_region_table():
-    for p in [os.path.join(_HERE, "data", "regions.txt"),
-              os.path.join(_HERE, "regions.txt"),
-              os.path.expanduser("~/regions.txt")]:
-        if os.path.isfile(p):
-            codes = {}
-            try:
-                with open(p, encoding="utf-8", errors="ignore") as f:
-                    for ln in f:
-                        m = re.search(r"\d{6}", ln)
-                        if m:
-                            codes[m.group()] = ln[m.end():].strip() or ln.strip()
-            except OSError:
-                continue
-            if codes:
-                return codes, p
-    return None, None
+    """加载行政区划表(支持源码运行与 zipapp 单文件运行)"""
+    p = paths.find_data("regions.txt")
+    if not p:
+        return None, None
+    codes = {}
+    try:
+        with open(p, encoding="utf-8", errors="ignore") as f:
+            for ln in f:
+                m = re.search(r"\d{6}", ln)
+                if m:
+                    codes[m.group()] = ln[m.end():].strip() or ln.strip()
+    except OSError:
+        return None, None
+    return (codes, p) if codes else (None, None)
 
 def validate_date(s):
     y, mo, d = int(s[:4]), int(s[4:6]), int(s[6:8])
